@@ -78,16 +78,16 @@ class Program
         };
         rootCommand.Add(listCommand);
 
-        var msbuildCommand = new SubprocessCommand(i => i.MSBuildDllPath, "msbuild", "Invokes the MSBuild bundled with Visual Studio")
+        var msbuildCommand = new SubprocessCommand(i => i.MSBuildDllPath, "msbuild", "Invoke the MSBuild bundled with Visual Studio")
         {
             Kind = SubprocessKind.Mono
         };
         rootCommand.Add(msbuildCommand);
 
-        var vstoolCommand = new SubprocessCommand(i => i.VSToolPath, "vstool", "Invokes the Visual Studio tool runner");
+        var vstoolCommand = new SubprocessCommand(i => i.VSToolPath, "vstool", "Invoke the Visual Studio tool runner");
         rootCommand.Add(vstoolCommand);
 
-        var pathCommand = new Command("path", "Print the path to the Visual Studio app bundle");
+        var pathCommand = new Command("path", "Print path to Visual Studio app bundle");
         pathCommand.Handler = new VSInstanceCommandHandler(GetInstance, i => { Console.WriteLine(i.BundlePath); return 0; });
         rootCommand.Add(pathCommand);
 
