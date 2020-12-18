@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.809.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-vsmac", "dotnet-vsmac\dotnet-vsmac.csproj", "{21490E35-D663-48C6-8214-0B189723636C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSMacLocator", "VSMacLocator\VSMacLocator.csproj", "{9BACAF95-135F-46D3-A8F1-2870D9BCA8B7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{21490E35-D663-48C6-8214-0B189723636C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21490E35-D663-48C6-8214-0B189723636C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21490E35-D663-48C6-8214-0B189723636C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21490E35-D663-48C6-8214-0B189723636C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BACAF95-135F-46D3-A8F1-2870D9BCA8B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BACAF95-135F-46D3-A8F1-2870D9BCA8B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BACAF95-135F-46D3-A8F1-2870D9BCA8B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BACAF95-135F-46D3-A8F1-2870D9BCA8B7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {484F3F8D-3777-41C2-A7DB-54D638D9B195}
+	EndGlobalSection
+EndGlobal
