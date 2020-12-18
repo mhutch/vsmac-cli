@@ -35,21 +35,21 @@ namespace VSMacLocator
 		const int kCFStringEncodingUTF8 = 0x08000100;
 
 		static MacInterop()
-        {
+		{
 			if (IntPtr.Size != 8)
-            {
+			{
 				throw new NotSupportedException("Only 64bit is supported");
-            }
-        }
+			}
+		}
 
 		static CFStringRef CreateString(string value) => CFStringCreateWithCString(IntPtr.Zero, value, kCFStringEncodingUTF8);
 
 		static string GetString(CFStringRef handle)
 		{
 			if (handle == IntPtr.Zero)
-            {
+			{
 				return null;
-            }
+			}
 
 			string value;
 
@@ -71,9 +71,9 @@ namespace VSMacLocator
 			}
 
 			if (buffer != IntPtr.Zero)
-            {
+			{
 				Marshal.FreeCoTaskMem(buffer);
-            }
+			}
 
 			return value;
 		}
@@ -210,10 +210,10 @@ namespace VSMacLocator
 		readonly struct CFPropertyListRef
 		{
 			CFPropertyListRef(IntPtr ptr) => Ptr = ptr;
-            readonly IntPtr Ptr;
+			readonly IntPtr Ptr;
 			public static explicit operator CFDictionaryRef(CFPropertyListRef r) => (CFDictionaryRef)r.Ptr;
 			public static implicit operator IntPtr(CFPropertyListRef r) => r.Ptr;
-			public static explicit operator CFPropertyListRef (IntPtr i) => new CFPropertyListRef(i);
+			public static explicit operator CFPropertyListRef(IntPtr i) => new CFPropertyListRef(i);
 		}
 
 		// NOTE this would be 4bytes on 32bit
@@ -237,15 +237,15 @@ namespace VSMacLocator
 		}
 
 		enum CFPropertyListFormat : long
-        {
+		{
 			OpenStep = 1,
 			Xml_v1_0 = 100,
 			Binary = 200
-        }
+		}
 
 		[Flags]
 		enum CFPropertyListMutabilityOptions : ulong
-        {
+		{
 			Immutable = 0,
 			MutableContainers = 1,
 			MutableContainersAndLeaves = 2
@@ -259,8 +259,8 @@ namespace VSMacLocator
 		};
 
 
-		public static Dictionary<string,string> GetStringValuesFromPlist(string plistPath, params string[] keys)
-        {
+		public static Dictionary<string, string> GetStringValuesFromPlist(string plistPath, params string[] keys)
+		{
 			var results = new Dictionary<string, string>();
 
 			//could also use CFUrlCreateFromFileSystemRepresentation but isn't obvious how that handles encoding
@@ -271,23 +271,23 @@ namespace VSMacLocator
 			var stream = CFReadStreamCreateWithFile(IntPtr.Zero, url);
 			CFReadStreamOpen(stream);
 
-			var dict = (CFDictionaryRef) CFPropertyListCreateWithStream(
+			var dict = (CFDictionaryRef)CFPropertyListCreateWithStream(
 				IntPtr.Zero, stream, 0, CFPropertyListMutabilityOptions.Immutable,
 				out CFPropertyListFormat format, out CFErrorRef error);
 
 			foreach (var key in keys)
-            {
+			{
 				var keyStr = CreateString(key);
-				var val = (CFStringRef) CFDictionaryGetValue(dict, keyStr);
+				var val = (CFStringRef)CFDictionaryGetValue(dict, keyStr);
 				CFRelease(keyStr);
 
 				if (val != IntPtr.Zero)
-                {
+				{
 					var valStr = GetString(val);
 					CFRelease(val);
 					results[key] = valStr;
-                }
-            }
+				}
+			}
 
 			CFRelease(dict);
 			CFReadStreamClose(stream);
