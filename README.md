@@ -1,11 +1,11 @@
-# vsmac-locator
+# vsmac-cli
 
 .NET CLI tool for querying Visual Studio for Mac installations and invoking bundled tools
 
 ## Installation
 
 ```bash
-dotnet tool install -g dotnet-vsmac
+dotnet tool install -g vsmac-cli
 ```
 
 ## Examples

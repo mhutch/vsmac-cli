@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.809.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-vsmac", "dotnet-vsmac\dotnet-vsmac.csproj", "{21490E35-D663-48C6-8214-0B189723636C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vsmac-cli", "vsmac-cli\vsmac-cli.csproj", "{21490E35-D663-48C6-8214-0B189723636C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSMacLocator", "VSMacLocator\VSMacLocator.csproj", "{9BACAF95-135F-46D3-A8F1-2870D9BCA8B7}"
 EndProject
