@@ -6,6 +6,7 @@ using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -78,13 +79,13 @@ class Program
         };
         rootCommand.Add(listCommand);
 
-        var msbuildCommand = new SubprocessCommand(i => i.MSBuildDllPath, "msbuild", "Invoke the MSBuild bundled with Visual Studio")
+        var msbuildCommand = new SubprocessCommand<VSMacInstance>(FindTool, "msbuild", "Invoke the MSBuild bundled with Visual Studio")
         {
             Kind = SubprocessKind.Mono
         };
         rootCommand.Add(msbuildCommand);
 
-        var vstoolCommand = new SubprocessCommand(i => i.VSToolPath, "vstool", "Invoke the Visual Studio tool runner");
+        var vstoolCommand = new SubprocessCommand<VSMacInstance>(FindTool, "vstool", "Invoke the Visual Studio tool runner");
         rootCommand.Add(vstoolCommand);
 
         var pathCommand = new Command("path", "Print path to Visual Studio app bundle");
@@ -100,11 +101,27 @@ class Program
 
         var builder = new CommandLineBuilder(rootCommand);
 
-        builder.UseMiddleware((c, n) => SubprocessCommand.Dispatch(c, n, GetInstance), MiddlewareOrder.ExceptionHandler);
+        SubprocessCommand<VSMacInstance>.RegisterMiddleware(builder, GetInstance);
 
         builder.UseDefaults();
         var parser = builder.Build();
         return parser.Invoke(args);
+    }
+
+    static string FindTool(VSMacInstance instance, string toolName)
+    {
+        var processPath = toolName switch
+        {
+            "msbuild" => instance.MSBuildDllPath,
+            "vstool" => instance.VSToolPath,
+            _ => null
+        };
+        if (processPath == null || !File.Exists(processPath))
+        {
+            Console.Error.WriteLine($"Did not find '{toolName}' in Visual Studio {instance.BundleVersion}");
+            return null;
+        }
+        return processPath;
     }
 
     class VSInstanceCommandHandler : ICommandHandler
