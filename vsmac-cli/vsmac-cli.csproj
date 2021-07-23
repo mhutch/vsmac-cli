@@ -18,6 +18,12 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
+    <StartAction>Project</StartAction>
+    <StartArguments>--preview list</StartArguments>
+    <ExternalConsole>false</ExternalConsole>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\VSMacLocator\VSMacLocator.csproj" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21308.1" />
