@@ -38,10 +38,11 @@ class Program
 
         VSMacInstance? GetInstance(ParseResult p)
         {
-            VSMacInstance instance;
+            // https://github.com/dotnet/command-line-api/issues/1360
+            var valueForSpecificVersionOption =
+                p.HasOption(specificVersionOption)? p.ValueForOption(specificVersionOption) : null;
 
-            var specificVersion = p.ValueForOption(specificVersionOption);
-            if (specificVersion != null)
+            if (valueForSpecificVersionOption is string specificVersion)
             {
                 var matches = instances.Where(i => i.BundleVersion.StartsWith(specificVersion)).ToList();
                 if (matches.Count == 0)
