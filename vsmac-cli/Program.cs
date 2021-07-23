@@ -159,7 +159,7 @@ class Program
 
         public override async Task<int> InvokeAsync(VSMacInstance context, IEnumerable<string> args, CancellationToken token)
         {
-            var sb = new StringBuilder("-a ");
+            var sb = new StringBuilder("-a");
             void AppendEscaped(string s)
             {
                 if (s.IndexOf('\\') > -1)
@@ -170,6 +170,8 @@ class Program
                 {
                     s = s.Replace("\"", "\\\"");
                 }
+
+                sb.Append(' ');
                 sb.Append('"');
                 sb.Append(s);
                 sb.Append('"');
