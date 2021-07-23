@@ -284,7 +284,6 @@ namespace VSMacLocator
 				if (val != IntPtr.Zero)
 				{
 					var valStr = GetString(val);
-					CFRelease(val);
 					results[key] = valStr;
 				}
 			}
