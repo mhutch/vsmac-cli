@@ -48,7 +48,7 @@ abstract class DispatchCommand<T> : Command
         var dispatchContext = dispatchContextProvider(context.ParseResult);
         if (dispatchContext == null)
         {
-            context.ResultCode = 1;
+            context.ExitCode = 1;
             return;
         }
 
@@ -77,6 +77,6 @@ abstract class DispatchCommand<T> : Command
             .Concat(context.ParseResult.UnparsedTokens);
 
         var result = await sub.InvokeAsync(dispatchContext, subArgs, context.GetCancellationToken());
-        context.ResultCode = result;
+        context.ExitCode = result;
     }
 }
