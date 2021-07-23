@@ -2,12 +2,16 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using VSMacLocator;
@@ -96,8 +100,8 @@ class Program
         versionCommand.Handler = new VSInstanceCommandHandler(GetInstance, i => { Console.WriteLine(i.BundleVersion); return 0; });
         rootCommand.Add(versionCommand);
 
-        //var openCommand = new Command("open", "Opens the specified files with Visual Studio");
-        //rootCommand.Add(openCommand);
+        var openCommand = new OpenCommandHandler("open", "Opens the specified files with Visual Studio");
+        rootCommand.Add(openCommand);
 
         var builder = new CommandLineBuilder(rootCommand);
 
@@ -144,6 +148,49 @@ class Program
             }
 
             return Task.FromResult (handler(instance));
+        }
+    }
+
+    class OpenCommandHandler : DispatchCommand<VSMacInstance>
+    {
+        public OpenCommandHandler(string name, string description = null) : base(name, description)
+        {
+        }
+
+        public override async Task<int> InvokeAsync(VSMacInstance context, IEnumerable<string> args, CancellationToken token)
+        {
+            var sb = new StringBuilder("-a ");
+            void AppendEscaped(string s)
+            {
+                if (s.IndexOf('\\') > -1)
+                {
+                    s = s.Replace("\\", "\\\\");
+                }
+                if (s.IndexOf('"') > -1)
+                {
+                    s = s.Replace("\"", "\\\"");
+                }
+                sb.Append('"');
+                sb.Append(s);
+                sb.Append('"');
+            }
+
+            AppendEscaped(context.BundlePath);
+            foreach (var a in args)
+            {
+                AppendEscaped(a);
+            }
+
+            Console.WriteLine(sb.ToString());
+
+            var psi = new ProcessStartInfo("open", sb.ToString())
+            {
+                UseShellExecute = false
+            };
+
+            var process = Process.Start(psi);
+            await process.WaitForExitAsync(token);
+            return process.ExitCode;
         }
     }
 }
