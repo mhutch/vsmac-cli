@@ -4,12 +4,14 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>vsmac</AssemblyName>
-    <Version>0.1.1</Version>
+    <Version>0.2</Version>
     <RootNamespace>VSMacLocator</RootNamespace>
     <Nullable>enable</Nullable>
     <PackAsTool>True</PackAsTool>
     <ToolCommandName>vsmac</ToolCommandName>
     <PackageId>vsmac-cli</PackageId>
+    <Authors>Mikayla Hutchinson</Authors>
+    <PackageTags>Visual Studio for Mac;VSMac;CLI</PackageTags>
     <Description>.NET CLI tool for querying Visual Studio for Mac installations and invoking bundled tools</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
