@@ -33,12 +33,22 @@ namespace VSMacLocator
         {
             var instances = new List<VSMacInstance>();
 
-            const string bundleShortVersionKey = "CFBundleShortVersionString";
-            const string releaseIdKey = "ReleaseId";
-
             var urls = MacInterop.GetApplicationUrls("com.microsoft.visual-studio", out _);
-            foreach (var bundlePath in urls)
+            instances.AddRange(urls.Select(bundlePath => CreateInstance(bundlePath)));
+
+            var previewUrls = MacInterop.GetApplicationUrls("com.microsoft.visual-studio-preview", out _);
+            instances.AddRange(previewUrls.Select(bundlePath => CreateInstance(bundlePath, isPreview: true)));
+
+            // sort by releaseid, newest first
+            instances.Sort((VSMacInstance a, VSMacInstance b) => string.CompareOrdinal(b.ReleaseId, a.ReleaseId));
+
+            return instances;
+
+            static VSMacInstance CreateInstance(string bundlePath, bool? isPreview = null)
             {
+                const string bundleShortVersionKey = "CFBundleShortVersionString";
+                const string releaseIdKey = "ReleaseId";
+
                 var infoPlistPath = Path.Combine(bundlePath, "Contents", "Info.plist");
                 var values = MacInterop.GetStringValuesFromPlist(infoPlistPath, bundleShortVersionKey, releaseIdKey);
                 var bundleVersion = values[bundleShortVersionKey];
@@ -46,15 +56,11 @@ namespace VSMacLocator
                 var binDir = Path.Combine(bundlePath, "Contents", "Resources", "lib", "monodevelop", "bin");
 
                 var brandingFile = Path.Combine(binDir, "branding", "Branding.xml");
-                var isPreview = File.ReadLines(brandingFile).Any(l => l.IndexOf("Preview", System.StringComparison.Ordinal) > -1);
+                isPreview ??= File.ReadLines(brandingFile).Any(l => l.IndexOf("Preview", System.StringComparison.Ordinal) > -1);
 
-                instances.Add(new VSMacInstance(bundlePath, binDir, bundleVersion, releaseId, isPreview));
+                VSMacInstance instance = new VSMacInstance(bundlePath, binDir, bundleVersion, releaseId, isPreview.Value);
+                return instance;
             }
-
-            // sort by releaseid, newest first
-            instances.Sort((VSMacInstance a, VSMacInstance b) => string.CompareOrdinal(b.ReleaseId, a.ReleaseId));
-
-            return instances;
         }
     }
 }
