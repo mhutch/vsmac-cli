@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 class SubprocessCommand<T> : DispatchCommand<T>
 {
-    public SubprocessCommand(Func<T, string, string> processPathProvider, string name, string description = null)
+    public SubprocessCommand(Func<T, string, string?> processPathProvider, string name, string? description = null)
         : base(name, description)
     {
         ProcessPathProvider = processPathProvider;
     }
 
-    Func<T, string, string> ProcessPathProvider { get; }
+    Func<T, string, string?> ProcessPathProvider { get; }
     public SubprocessKind Kind { get; set; } = SubprocessKind.Native;
 
     static ProcessStartInfo CreateStartInfo(SubprocessKind kind, string path)
@@ -52,8 +52,7 @@ class SubprocessCommand<T> : DispatchCommand<T>
             psi.ArgumentList.Add(arg);
         }
 
-        var process = Process.Start(psi);
-
+        var process = Process.Start(psi)!;
         await process.WaitForExitAsync(token);
         return process.ExitCode;
     }

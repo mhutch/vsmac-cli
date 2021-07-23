@@ -33,19 +33,33 @@ namespace VSMacLocator
         {
             var instances = new List<VSMacInstance>();
 
-            var urls = MacInterop.GetApplicationUrls("com.microsoft.visual-studio", out _);
-            instances.AddRange(urls.Select(bundlePath => CreateInstance(bundlePath)));
-
-            var previewUrls = MacInterop.GetApplicationUrls("com.microsoft.visual-studio-preview", out _);
-            instances.AddRange(previewUrls.Select(bundlePath => CreateInstance(bundlePath, isPreview: true)));
+            AddInstancesFromBundleId("com.microsoft.visual-studio");
+            AddInstancesFromBundleId("com.microsoft.visual-studio-preview", isPreview: true);
 
             // sort by releaseid, newest first
             instances.Sort((VSMacInstance a, VSMacInstance b) => string.CompareOrdinal(b.ReleaseId, a.ReleaseId));
 
             return instances;
 
-            static VSMacInstance CreateInstance(string bundlePath, bool? isPreview = null)
+            void AddInstancesFromBundleId (string bundleId, bool isPreview = false)
             {
+                if (MacInterop.GetApplicationUrls(bundleId, out _) is string?[] urls)
+                {
+                    instances.AddRange(
+                        urls
+                        .Select(bundlePath => TryCreateInstance(bundlePath, isPreview))
+                        .OfType<VSMacInstance>()
+                    );
+                }
+            }
+
+            static VSMacInstance? TryCreateInstance(string? bundlePath, bool? isPreview = null)
+            {
+                if (bundlePath is null)
+                {
+                    return null;
+                }
+
                 const string bundleShortVersionKey = "CFBundleShortVersionString";
                 const string releaseIdKey = "ReleaseId";
 
@@ -54,6 +68,11 @@ namespace VSMacLocator
                 var bundleVersion = values[bundleShortVersionKey];
                 var releaseId = values[releaseIdKey];
                 var binDir = Path.Combine(bundlePath, "Contents", "Resources", "lib", "monodevelop", "bin");
+
+                if ((bundleVersion is null) || (releaseId is null))
+                {
+                    return null;
+                }
 
                 var brandingFile = Path.Combine(binDir, "branding", "Branding.xml");
                 isPreview ??= File.ReadLines(brandingFile).Any(l => l.IndexOf("Preview", System.StringComparison.Ordinal) > -1);

@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 /// <typeparam name="T">Context </typeparam>
 abstract class DispatchCommand<T> : Command
 {
-    public DispatchCommand(string name, string description = null)
+    public DispatchCommand(string name, string? description = null)
         : base(name, description)
     {
         TreatUnmatchedTokensAsErrors = false;
@@ -31,13 +31,13 @@ abstract class DispatchCommand<T> : Command
     /// Registers dispatch command handler into middleware pipeline.
     /// </summary>
     /// <param name="dispatchContextProvider">Processes preceding arguments to create context for the dispatch</param>
-    public static void RegisterMiddleware(CommandLineBuilder builder, Func<ParseResult, T> dispatchContextProvider)
+    public static void RegisterMiddleware(CommandLineBuilder builder, Func<ParseResult, T?> dispatchContextProvider)
     {
         builder.UseMiddleware((c, n) => Dispatch(c, n, dispatchContextProvider), MiddlewareOrder.ExceptionHandler);
     }
 
     static async Task Dispatch(
-        InvocationContext context, Func<InvocationContext, Task> next, Func<ParseResult, T> dispatchContextProvider)
+        InvocationContext context, Func<InvocationContext, Task> next, Func<ParseResult, T?> dispatchContextProvider)
     {
         if (context.ParseResult.CommandResult.Command is not DispatchCommand<T> sub)
         {

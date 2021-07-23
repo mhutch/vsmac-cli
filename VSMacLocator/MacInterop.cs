@@ -44,7 +44,7 @@ namespace VSMacLocator
 
 		static CFStringRef CreateString(string value) => CFStringCreateWithCString(IntPtr.Zero, value, kCFStringEncodingUTF8);
 
-		static string GetString(CFStringRef handle)
+		static string? GetString(CFStringRef handle)
 		{
 			if (handle == IntPtr.Zero)
 			{
@@ -78,7 +78,7 @@ namespace VSMacLocator
 			return value;
 		}
 
-		public static string[] GetApplicationUrls(string bundleIdentifier, out long errorCode)
+		public static string?[]? GetApplicationUrls(string bundleIdentifier, out long errorCode)
 		{
 			errorCode = 0;
 
@@ -95,7 +95,7 @@ namespace VSMacLocator
 
 
 			var count = CFArrayGetCount(urlArr);
-			var urls = new string[count];
+			var urls = new string?[count];
 			for (long i = 0; i < count; i++)
 			{
 				var urlRef = (CFUrlRef)CFArrayGetValueAtIndex(urlArr, i);
@@ -259,9 +259,9 @@ namespace VSMacLocator
 		};
 
 
-		public static Dictionary<string, string> GetStringValuesFromPlist(string plistPath, params string[] keys)
+		public static Dictionary<string, string?> GetStringValuesFromPlist(string plistPath, params string[] keys)
 		{
-			var results = new Dictionary<string, string>();
+			var results = new Dictionary<string, string?>();
 
 			//could also use CFUrlCreateFromFileSystemRepresentation but isn't obvious how that handles encoding
 			var pathStr = CreateString(plistPath);

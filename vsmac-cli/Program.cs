@@ -36,7 +36,7 @@ class Program
         var specificVersionOption = new Option<string>("-v", "Use specific version of Visual Studio");
         rootCommand.AddOption(specificVersionOption);
 
-        VSMacInstance GetInstance(ParseResult p)
+        VSMacInstance? GetInstance(ParseResult p)
         {
             VSMacInstance instance;
 
@@ -59,16 +59,15 @@ class Program
                     return matches[0];
                 }
             }
-            else
+
+            var usePreview = p.ValueForOption(previewOption);
+            if (instances.FirstOrDefault(i => i.IsPreview == usePreview) is VSMacInstance instance)
             {
-                var usePreview = p.ValueForOption(previewOption);
-                instance = instances.FirstOrDefault(i => i.IsPreview == usePreview);
-                if(instance == null)
-                {
-                    Console.Error.WriteLine($"Did not find a {(usePreview?"preview":"stable")} version of Visual Studio");
-                }
+                return instance;
             }
-            return instance;
+
+            Console.Error.WriteLine($"Did not find a {(usePreview?"preview":"stable")} version of Visual Studio");
+            return null;
         }
 
         var listCommand = new Command("list", "List available Visual Studio instances") {
@@ -112,7 +111,7 @@ class Program
         return parser.Invoke(args);
     }
 
-    static string FindTool(VSMacInstance instance, string toolName)
+    static string? FindTool(VSMacInstance instance, string toolName)
     {
         var processPath = toolName switch
         {
@@ -130,13 +129,13 @@ class Program
 
     class VSInstanceCommandHandler : ICommandHandler
     {
-        public VSInstanceCommandHandler(Func<ParseResult, VSMacInstance> getInstance, Func<VSMacInstance, int> handler)
+        public VSInstanceCommandHandler(Func<ParseResult, VSMacInstance?> getInstance, Func<VSMacInstance, int> handler)
         {
             this.getInstance = getInstance;
             this.handler = handler;
         }
 
-        readonly Func<ParseResult, VSMacInstance> getInstance;
+        readonly Func<ParseResult, VSMacInstance?> getInstance;
         readonly Func<VSMacInstance, int> handler;
 
         public Task<int> InvokeAsync(InvocationContext context)
@@ -153,7 +152,7 @@ class Program
 
     class OpenCommandHandler : DispatchCommand<VSMacInstance>
     {
-        public OpenCommandHandler(string name, string description = null) : base(name, description)
+        public OpenCommandHandler(string name, string? description = null) : base(name, description)
         {
         }
 
@@ -188,7 +187,7 @@ class Program
                 UseShellExecute = false
             };
 
-            var process = Process.Start(psi);
+            var process = Process.Start(psi)!;
             await process.WaitForExitAsync(token);
             return process.ExitCode;
         }

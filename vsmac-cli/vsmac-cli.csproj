@@ -6,6 +6,7 @@
     <AssemblyName>vsmac</AssemblyName>
     <Version>0.1.1</Version>
     <RootNamespace>VSMacLocator</RootNamespace>
+    <Nullable>enable</Nullable>
     <PackAsTool>True</PackAsTool>
     <ToolCommandName>vsmac</ToolCommandName>
     <PackageId>vsmac-cli</PackageId>
