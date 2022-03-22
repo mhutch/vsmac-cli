@@ -67,7 +67,7 @@ namespace VSMacLocator
                 var values = MacInterop.GetStringValuesFromPlist(infoPlistPath, bundleShortVersionKey, releaseIdKey);
                 var bundleVersion = values[bundleShortVersionKey];
                 var releaseId = values[releaseIdKey];
-                var binDir = Path.Combine(bundlePath, "Contents", "Resources", "lib", "monodevelop", "bin");
+                var binDir = Path.Combine(bundlePath, "Contents", "MonoBundle");
 
                 if ((bundleVersion is null) || (releaseId is null))
                 {
