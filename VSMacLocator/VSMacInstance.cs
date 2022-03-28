@@ -67,14 +67,23 @@ namespace VSMacLocator
                 var values = MacInterop.GetStringValuesFromPlist(infoPlistPath, bundleShortVersionKey, releaseIdKey);
                 var bundleVersion = values[bundleShortVersionKey];
                 var releaseId = values[releaseIdKey];
-                var binDir = Path.Combine(bundlePath, "Contents", "Resources", "lib", "monodevelop", "bin");
 
                 if ((bundleVersion is null) || (releaseId is null))
                 {
                     return null;
                 }
 
+                // This is the path to the binaries in current versions of Visual Studio for Mac
+                var binDir = Path.Combine(bundlePath, "Contents", "MonoBundle");
                 var brandingFile = Path.Combine(binDir, "branding", "Branding.xml");
+                if (!File.Exists(brandingFile)) {
+                    // If the file isn't there, check the previous location for backward compatibility
+                    binDir = Path.Combine(bundlePath, "Contents", "Resources", "lib", "monodevelop", "bin");
+                    brandingFile = Path.Combine(binDir, "branding", "Branding.xml");
+                    if (!File.Exists(brandingFile)) {
+                        return null;
+                    }
+                }
                 isPreview ??= File.ReadLines(brandingFile).Any(l => l.IndexOf("Preview", System.StringComparison.Ordinal) > -1);
 
                 VSMacInstance instance = new VSMacInstance(bundlePath, binDir, bundleVersion, releaseId, isPreview.Value);
