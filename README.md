@@ -1,6 +1,12 @@
 # vsmac-cli
 
-.NET CLI tool for querying Visual Studio for Mac installations and invoking bundled tools
+.NET CLI tool for interacting with Visual Studio for Mac.
+
+* Open files: `vsmac open Hello.cs`
+* Query installed versions: `vsmac list`
+* Find app bundle path: `vsmac path`
+* Invoke MSBuild: `vsmac msbuild`
+* Target specific versions: `vsmac -v 17.1 path`
 
 ## Installation
 
@@ -10,7 +16,7 @@ dotnet tool install -g vsmac-cli
 
 ## Examples
 
-```
+```bash
 $ vsmac list
 8.9.0.947 [preview] /Applications/Visual Studio (Preview).app
 8.8.3.16  [stable]  /Applications/Visual Studio.app
@@ -25,31 +31,14 @@ $ vsmac --preview path
 ```bash
 $ vsmac version
 8.8.3.16
+$ vsmac --preview version
+8.9.0.947
+$ vsmac -v 7 version
+7.4.1.48
 ```
 
 ```bash
-$ vsmac msbuild
+$ vsmac msbuild Hello.csproj -c Release
 Microsoft (R) Build Engine version 16.8.0 for Mono
 [...]
-```
-
-## Help
-
-```bash
-$ vsmac -h
-Usage:
-  vsmac [options] [command]
-
-Options:
-  -p, --preview     Use preview instance of Visual Studio
-  -v <v>            Use specific version of Visual Studio
-  --version         Show version information
-  -?, -h, --help    Show help and usage information
-
-Commands:
-  list       List available Visual Studio instances
-  msbuild    Invoke the MSBuild bundled with Visual Studio
-  vstool     Invoke the Visual Studio tool runner
-  path       Print path to Visual Studio app bundle
-  version    Print version of Visual Studio
 ```
