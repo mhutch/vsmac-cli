@@ -44,7 +44,7 @@ class Program
 
             if (valueForSpecificVersionOption is string specificVersion)
             {
-                var matches = instances.Where(i => i.BundleVersion.StartsWith(specificVersion)).ToList();
+                var matches = instances.Where(i => i.BundleVersion.StartsWith(specificVersion, StringComparison.OrdinalIgnoreCase)).ToList();
                 if (matches.Count == 0)
                 {
                     Console.Error.WriteLine($"Did not find any version matching '{specificVersion}'");

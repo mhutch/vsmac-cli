@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Mikayla Hutchinson</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <PublishRepositoryUrl>True</PublishRepositoryUrl>
+    <IncludeSymbols>True</IncludeSymbols>
+    <PackageProjectUrl>https://github.com/mhutch/vsmac-cli</PackageProjectUrl>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)packages\$(Configuration)</PackageOutputPath>
+    <Nullable>enable</Nullable>
+    <LangVersion>10.0</LangVersion>
+    <AnalysisLevel>latest-Recommended</AnalysisLevel>
+  </PropertyGroup>
+</Project>

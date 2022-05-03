@@ -4,19 +4,13 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>vsmac</AssemblyName>
-    <Version>0.3</Version>
     <RootNamespace>VSMacLocator</RootNamespace>
-    <Nullable>enable</Nullable>
     <PackAsTool>True</PackAsTool>
     <ToolCommandName>vsmac</ToolCommandName>
     <PackageId>vsmac-cli</PackageId>
-    <Authors>Mikayla Hutchinson</Authors>
     <PackageTags>VisualStudio;VSMac;Mac;CLI</PackageTags>
     <Description>.CLI tool for Visual Studio for Mac. Open files, query installed versions, invoke MSBuild, and more!</Description>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PublishRepositoryUrl>True</PublishRepositoryUrl>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <RollForward>LatestMajor</RollForward>

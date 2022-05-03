@@ -42,7 +42,7 @@ namespace VSMacLocator
 			}
 		}
 
-		static CFStringRef CreateString(string value) => CFStringCreateWithCString(IntPtr.Zero, value, kCFStringEncodingUTF8);
+		static CFStringRef CreateString(string value) => CFStringCreateWithCString(IntPtr.Zero, value);
 
 		static string? GetString(CFStringRef handle)
 		{
@@ -109,8 +109,14 @@ namespace VSMacLocator
 			return urls;
 		}
 
+		// not in netstandard 2.0
+		const UnmanagedType MarshalUTF8String = (UnmanagedType)0x30;
+
+#pragma warning disable CA2101 // false positive
 		[DllImport(CoreFoundation)]
-		static extern CFStringRef CFStringCreateWithCString(IntPtr alloc, string str, int encoding);
+		static extern CFStringRef CFStringCreateWithCString(
+			IntPtr alloc, [MarshalAs(MarshalUTF8String)] string str, int encoding = kCFStringEncodingUTF8);
+#pragma warning restore CA2101
 
 		[DllImport(CoreFoundation)]
 		static extern void CFRelease(IntPtr handle);
@@ -121,7 +127,7 @@ namespace VSMacLocator
 		[DllImport(CoreFoundation)]
 		extern static IntPtr CFStringGetCharactersPtr(CFStringRef handle);
 
-		[DllImport(CoreFoundation, CharSet = CharSet.Unicode)]
+		[DllImport(CoreFoundation)]
 		extern static IntPtr CFStringGetCharacters(CFStringRef handle, CFRange range, IntPtr buffer);
 
 		[DllImport(CoreFoundation)]
