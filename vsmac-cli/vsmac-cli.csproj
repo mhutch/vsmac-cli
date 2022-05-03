@@ -11,8 +11,6 @@
     <PackageTags>VisualStudio;VSMac;Mac;CLI</PackageTags>
     <Description>.CLI tool for Visual Studio for Mac. Open files, query installed versions, invoke MSBuild, and more!</Description>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <IncludeSymbols>True</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <RollForward>LatestMajor</RollForward>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
