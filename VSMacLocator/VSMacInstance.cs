@@ -5,10 +5,29 @@ namespace VSMacLocator;
 
 public class VSMacInstance
 {
+    /// <summary>
+    /// Path of the app bundle.
+    /// </summary>
     public string BundlePath { get; }
+
+    /// <summary>
+    /// Directory within the app bundle containing the managed binaries.
+    /// </summary>
     public string BinDir { get; }
+
+    /// <summary>
+    /// Version of the app bundle.
+    /// </summary>
     public string BundleVersion { get; }
+
+    /// <summary>
+    /// Internal release identifier string of the Visual Studio for Mac build.
+    /// </summary>
     public string ReleaseId { get; }
+
+    /// <summary>
+    /// Whether the app bundle is a preview release.
+    /// </summary>
     public bool IsPreview { get; }
 
     VSMacInstance(string path, string binDir, string version, string releaseId, bool isPreview)
@@ -20,10 +39,19 @@ public class VSMacInstance
         IsPreview = isPreview;
     }
 
+    /// <summary>
+    /// The path to the `msbuild` executable inside the app bundle.
+    /// </summary>
     public string MSBuildDllPath => Path.Combine(BinDir, "MSBuild", "Current", "bin", "MSBuild.dll");
 
+    /// <summary>
+    /// The path to the `vstool` executable inside the app bundle.
+    /// </summary>
     public string VSToolPath => Path.Combine(BundlePath, "Contents", "MacOS", "vstool");
 
+    /// <summary>
+    /// Finds all Visual Studio for Mac instances installed on the machine.
+    /// </summary>
     public static IList<VSMacInstance> FindAll()
     {
         var instances = new List<VSMacInstance>();
