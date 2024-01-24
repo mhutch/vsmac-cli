@@ -28,7 +28,7 @@ abstract class DispatchCommand<T> : Command
     /// <param name="dispatchContextProvider">Processes preceding arguments to create context for the dispatch</param>
     public static void RegisterMiddleware(CommandLineBuilder builder, Func<ParseResult, T?> dispatchContextProvider)
     {
-        builder.UseMiddleware((c, n) => Dispatch(c, n, dispatchContextProvider), MiddlewareOrder.ExceptionHandler);
+        builder.AddMiddleware((c, n) => Dispatch(c, n, dispatchContextProvider), MiddlewareOrder.ExceptionHandler);
     }
 
     static async Task Dispatch(

@@ -3,7 +3,6 @@
 
 using System.CommandLine;
 using System.CommandLine.Builder;
-using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 
 using VSMacLocator;
@@ -28,7 +27,7 @@ VSMacInstance? GetInstance(ParseResult p)
 {
     // https://github.com/dotnet/command-line-api/issues/1360
     var valueForSpecificVersionOption =
-        p.HasOption(specificVersionOption)? p.ValueForOption(specificVersionOption) : null;
+        p.HasOption(specificVersionOption)? p.GetValueForOption(specificVersionOption) : null;
 
     if (valueForSpecificVersionOption is string specificVersion)
     {
@@ -49,7 +48,7 @@ VSMacInstance? GetInstance(ParseResult p)
         }
     }
 
-    var usePreview = p.ValueForOption(previewOption);
+    var usePreview = p.GetValueForOption(previewOption);
     if (instances.FirstOrDefault(i => i.IsPreview == usePreview) is VSMacInstance instance)
     {
         return instance;
@@ -59,15 +58,15 @@ VSMacInstance? GetInstance(ParseResult p)
     return null;
 }
 
-rootCommand.Add(new Command("list", "List available Visual Studio instances") {
-    Handler = CommandHandler.Create(() => {
-        var maxLen = instances.Max(s => s.BundleVersion.Length);
-        foreach (var instance in instances)
-        {
-            Console.WriteLine($"{instance.BundleVersion.PadRight(maxLen)} {(instance.IsPreview ? "[preview]" : "[stable] ")} {instance.BundlePath}");
-        }
-    })
+var listCommand = new Command("list", "List available Visual Studio instances");
+listCommand.SetHandler (() => {
+    var maxLen = instances.Max(s => s.BundleVersion.Length);
+    foreach (var instance in instances)
+    {
+        Console.WriteLine($"{instance.BundleVersion.PadRight(maxLen)} {(instance.IsPreview ? "[preview]" : "[stable] ")} {instance.BundlePath}");
+    }
 });
+rootCommand.Add(listCommand);
 
 rootCommand.Add(new SubprocessCommand<VSMacInstance>(FindTool, "msbuild", "Invoke the MSBuild bundled with Visual Studio") {
     Kind = SubprocessKind.Mono

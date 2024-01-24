@@ -8,8 +8,8 @@ using VSMacLocator;
 
 sealed class VSInstanceCommandHandler(Func<ParseResult, VSMacInstance?> getInstance, Func<VSMacInstance, int> handler) : ICommandHandler
 {
-    public Task<int> InvokeAsync(InvocationContext context)
-        => getInstance(context.ParseResult) is VSMacInstance instance
-            ? Task.FromResult (handler(instance))
-            : Task.FromResult(1);
+    public Task<int> InvokeAsync(InvocationContext context) => Task.FromResult (Invoke (context));
+
+    public int Invoke(InvocationContext context) =>
+        getInstance(context.ParseResult) is VSMacInstance instance? handler(instance) : 1;
 }
