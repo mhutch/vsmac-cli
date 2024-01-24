@@ -1,15 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 /// <summary>
 /// Command that handles all arguments that come after it

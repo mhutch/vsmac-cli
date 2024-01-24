@@ -17,14 +17,11 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
-    - name: Set up NuGet
-      uses: nuget/setup-nuget@v1
-
     - name: Restore
       run: dotnet restore
 
     - name: Build
-      run: dotnet build Mono.TextTemplating.sln --no-restore
+      run: dotnet build vsmac-cli.sln --no-restore
 
     - name: Test
       run: dotnet test --no-build

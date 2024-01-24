@@ -1,21 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 
-class SubprocessCommand<T> : DispatchCommand<T>
+sealed class SubprocessCommand<T>(Func<T, string, string?> processPathProvider, string name, string? description = null) : DispatchCommand<T>(name, description)
 {
-    public SubprocessCommand(Func<T, string, string?> processPathProvider, string name, string? description = null)
-        : base(name, description)
-    {
-        ProcessPathProvider = processPathProvider;
-    }
-
-    Func<T, string, string?> ProcessPathProvider { get; }
     public SubprocessKind Kind { get; set; } = SubprocessKind.Native;
 
     static ProcessStartInfo CreateStartInfo(SubprocessKind kind, string path)
@@ -39,7 +28,7 @@ class SubprocessCommand<T> : DispatchCommand<T>
 
     public async override Task<int> InvokeAsync(T context, IEnumerable<string> args, CancellationToken token)
     {
-        var processPath = ProcessPathProvider(context, Name);
+        var processPath = processPathProvider(context, Name);
 
         if(processPath == null)
         {
